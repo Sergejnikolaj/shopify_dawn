@@ -1,0 +1,177 @@
+// --------------------------------------------------
+// event wrapper
+
+@mixin on-event($self: false) {
+  @if $self {
+    &,
+    &:hover,
+    &:active,
+    &:focus {
+      @content;
+    }
+  } @else {
+    &:hover,
+    &:active,
+    &:focus {
+      @content;
+    }
+  }
+}
+
+// --------------------------------------------------
+// contexts
+
+@mixin when-inside($selector) {
+  #{$selector} & {
+    @content;
+  }
+}
+
+// --------------------------------------------------
+// font size
+
+@function rem($size) {
+  $remSize: $size / 15px;
+  @return $remSize * 1rem;
+}
+
+@mixin font-size($size) {
+  font-size: $size;
+  font-size: rem($size);
+}
+
+@mixin text-styling($size: $sch-font-size-sm, $font-family: $font-primary, $font-weight: $fw-regular, $color: $primary-color,
+$line-height: normal, $letter-spacing: normal) {
+  font-size: rem($size);
+  font-family: $font-family;
+  font-weight: $font-weight;
+  color: $color;
+  line-height: $line-height;
+  @if $letter-spacing==normal {
+    letter-spacing: normal;
+  } @else {
+    letter-spacing: #{$letter-spacing / $size}em;
+  }
+}
+
+// --------------------------------------------------
+// images and icons
+@function getIcon($name, $format: "svg") {
+  @return "#{$name}.#{$format}";
+}
+
+@function getImage($name, $format: "jpg") {
+  @return "#{$name}.#{$format}";
+}
+
+// --------------------------------------------------
+// background image
+
+$image-path: '{{ asset_url }}' !default;
+$fallback-extension: 'png' !default;
+$retina-suffix: '@2x';
+@mixin background-image($name, $size:false){
+  background-image: url( #{'{{ "#{$name}.svg" | asset_url }}'} );
+  @if($size){
+    background-size: $size;
+  }
+  .no-svg &{
+    background-image: url( #{'{{ "#{$name}.#{$fallback-extension}" | asset_url }}'} );
+
+    @media only screen and (-moz-min-device-pixel-ratio: 1.5), only screen and (-o-min-device-pixel-ratio: 3/2), only screen and (-webkit-min-device-pixel-ratio: 1.5), only screen and (min-device-pixel-ratio: 1.5) {
+      background-image: url( #{'{{ "#{$name}#{$retina-suffix}.#{$fallback-extension}" | asset_url }}'} );
+    }
+  }
+}
+
+// --------------------------------------------------
+// clearfix
+
+%clearfix {
+  *zoom: 1;
+  &:before, &:after {
+    content: " ";
+    display: table;
+  }
+  &:after {
+    clear: both;
+  }
+}
+
+// --------------------------------------------------
+// animations
+
+@mixin keyframes($animation-name) {
+  @-webkit-keyframes #{$animation-name} {
+    @content;
+  }
+  @-moz-keyframes #{$animation-name} {
+    @content;
+  }
+  @-ms-keyframes #{$animation-name} {
+    @content;
+  }
+  @-o-keyframes #{$animation-name} {
+    @content;
+  }
+  @keyframes #{$animation-name} {
+    @content;
+  }
+}
+
+@mixin animation($str) {
+  -webkit-animation: #{$str};
+  -moz-animation: #{$str};
+  -ms-animation: #{$str};
+  -o-animation: #{$str};
+  animation: #{$str};
+}
+
+// --------------------------------------------------
+// fonts
+
+@mixin font-file($asset-font-name) {
+  src: url('{{ "#{$asset-font-name}.eot" | asset_url }}');
+  src: url('{{ "#{$asset-font-name}.eot" | asset_url }}?#iefix') format("embedded-opentype"),
+    url('{{ "#{$asset-font-name}.woff" | asset_url }}') format("woff"),
+    url('{{ "#{$asset-font-name}.ttf" | asset_url }}') format("truetype"),
+    url('{{ "#{$asset-font-name}.svg" | asset_url }}') format("svg");
+}
+
+// --------------------------------------------------
+// aspect ratio
+// e.g. @include aspect-ratio(16,9);
+// expects child to have class of `.content` (could be replaced with a wildcard `*`)
+
+@mixin aspect-ratio($width, $height) {
+  position: relative;
+  &:before {
+    display: block;
+    content: "";
+    width: 100%;
+    padding-top: ($height / $width) * 100%;
+  }
+  > .content {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+  }
+}
+
+// Responsive
+@mixin respond-to($breakpoint) {
+  @if map-has-key($breakpoints, $breakpoint) {
+    $breakpoint-value: map-get($breakpoints, $breakpoint);
+    @media (max-width: ($breakpoint-value - 1)) {
+      @content;
+    }
+  } @else if $breakpoint == "ie" {
+    @media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
+      @content;
+    }
+  } @else {
+    @warn 'Invalid breakpoint: #{$breakpoint}.';
+  }
+}
