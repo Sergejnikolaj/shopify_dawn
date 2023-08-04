@@ -382,12 +382,16 @@
 
     {% section 'announcement-bar' %}
     {% section 'header' %}
-      <main id="MainContent"
+    <main
+      id="MainContent"
       class="content-for-layout focus-none"
       role="main"
       tabindex="-1">
 
-      {% comment %}{% section 'breadcrumbs' %}{% endcomment %}
+      {%- if settings.breadcrumps_display == true -%}
+        {% render 'breadcrumbs' %}
+        {% comment %}{% section 'breadcrumbs' %}{% endcomment %}
+      {%- endif -%}
 
       {{ content_for_layout }}
     </main>
