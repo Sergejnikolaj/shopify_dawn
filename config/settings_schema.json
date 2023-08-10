@@ -8,6 +8,22 @@
     "theme_support_url": "https:\/\/support.shopify.com\/"
   },
   {
+    "name": "Display Custom blocks",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Breadcrumbs displaying"
+      },
+      {
+        "type": "checkbox",
+        "id": "breadcrumps_display",
+        "default": true,
+        "label": "Breadcrumbs",
+        "info": "Breadcrumbs show/hide"
+      }
+    ]
+  },
+  {
     "name": "t:settings_schema.colors.name",
     "settings": [
       {
