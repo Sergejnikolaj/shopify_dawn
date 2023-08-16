@@ -1,31 +1,23 @@
-document.addEventListener("DOMContentLoaded", function(event) {
+document.addEventListener("DOMContentLoaded", function (event) {
   console.log("DOM fully loaded and parsed");
-  
 
+  const landingGulpSlider = () => {
+    $(".dawn-temp-json .dawn-feat-coll-wrap ul").each(function () {
+      const slider = $(this);
+      const slidesQty = slider.parent().data("slider-slides");
+      const slidesToScroll = slider.parent().data("slider-scroll");
+      const sliderDots =
+        slider.parent().data("slider-dots") == true ? true : false;
 
-
-
-
-  $(".dawn-temp-json .dawn-feat-coll-wrap ul").each(function () {
-    const slider = $(this);
-    const slidesQty = slider.parent().data("slider-slides");
-    const slidesToScroll = slider.parent().data("slider-scroll");
-    const sliderDots = slider.parent().data("slider-dots");
-
-
-    console.log('AAA slider.parent === ',slider.parent());
-    //data-slide-qty="3"
-    console.log('AAA slider.parent data === ',slider.parent().data("slide-qty"));
-
-    slider.slick({
+      slider.slick({
         autoplay: false,
         arrows: true,
         infinite: false,
         slidesToShow: slidesQty,
         slidesToScroll: slidesToScroll,
-        prevArrow: slider.parent().find('.dawn-slick-prev'),
-        nextArrow: slider.parent().find('.dawn-slick-next'),
-        dots: true,
+        prevArrow: slider.parent().find(".dawn-slick-prev"),
+        nextArrow: slider.parent().find(".dawn-slick-next"),
+        dots: sliderDots,
         responsive: [
           {
             breakpoint: 1280,
@@ -49,20 +41,9 @@ document.addEventListener("DOMContentLoaded", function(event) {
             },
           },
         ],
+      });
     });
-});
+  };
 
-
-
-
-
-
-
-
-
-
-
-  //landingGulpSlider();
-
-
+  landingGulpSlider();
 });
